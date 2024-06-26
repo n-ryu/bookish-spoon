@@ -13,8 +13,20 @@ const Container = styled.div({
 const PlayerContainer = styled.div({
   display: "flex",
   gap: 4,
-  justifyContent: "space-between",
+  justifyContent: "space-evenly",
 });
+
+const PlayerText = styled.div<{ win?: boolean; lose?: boolean }>(
+  ({ win, lose }) => ({
+    fontSize: "1.2rem",
+    paddingTop: 4,
+    paddingBottom: 2,
+    fontWeight: "bold",
+    opacity: 0.8,
+    ...(win && { color: "gold", opacity: 1 }),
+    ...(lose && { opacity: 0.3 }),
+  })
+);
 
 const SetsContainer = styled.div({
   display: "flex",
@@ -63,8 +75,12 @@ export const MatchBox = ({ match, matchNumber = 3, onChange }: Props) => {
   return (
     <Container>
       <PlayerContainer>
-        <button>{match?.playerA?.name ?? "선수 A"}</button>
-        <button>{match?.playerB?.name ?? "선수 B"}</button>
+        <PlayerText win={match?.winner === "A"} lose={match?.winner === "B"}>
+          {match?.playerA?.name ?? "선수 A"}
+        </PlayerText>
+        <PlayerText win={match?.winner === "B"} lose={match?.winner === "A"}>
+          {match?.playerB?.name ?? "선수 B"}
+        </PlayerText>
       </PlayerContainer>
       <SetsContainer>
         {sets.map((set, i) => (
